@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class ex15Test {
+public class ListTest {
 
 	private void nullFindTest(ExtendsLookup list, String name1){
 		assertNull(list.find(name1));
