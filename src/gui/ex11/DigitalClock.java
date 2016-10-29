@@ -5,14 +5,25 @@ package gui.ex11;
 import java.awt.*;
 
 public class DigitalClock extends Frame {
-	public DigitalClock() {
+	private String time = "00:00.00";
+	public DigitalClock(int hour, int minute, int second) {
 		super("DigitalClock");
-		setSize(200, 100);
+		setSize(220, 100);
 		addWindowListener(new MyWindowAdapter());
 		this.setVisible(true);
+
+		Thread subTread = new Thread(new UpdateTimeRunnable(this, hour, minute, second));
+		subTread.start();
+	}
+	
+	public void setTime(String newTime){
+		time = newTime;
 	}
 
 	public void paint(Graphics g) {
-		g.drawString("22:57",5,45);
+		Font font = new Font("Arial", Font.PLAIN, 50);
+		g.setFont(font);
+		g.drawString(time, 10, 80);
 	}
+	
 }
