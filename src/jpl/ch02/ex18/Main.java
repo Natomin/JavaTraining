@@ -5,15 +5,11 @@ public class Main {
 	public static void main(String[] args) {
 		Vehicle[] car = new Vehicle[] {new Vehicle(), new Vehicle(), new Vehicle()};
 		
-//		String[] name = new String[] {"aaa", "bbb", "ccc"};
-//		for(int i = 0; i < car.length; i++){
-//			car[i].setDriverName(name[i]);
-//			car[i].printName();
-//		}
-		
 		for(int i = 0; i < args.length; i++){
 			car[i].setDriverName(args[i]);
 			car[i].printName();
 		}
 	}
 }
+//1. cd ~/bin （Main.classがあることを確認）
+//2. java jpl.ch02.ex18.Main コマンドライン引数（.classはつけない）

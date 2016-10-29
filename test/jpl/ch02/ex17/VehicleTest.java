@@ -27,10 +27,9 @@ public class VehicleTest {
 		assertEquals(velocity, car.getVelocity(), 1e10);
 		assertEquals(deg, car.getDeg(), 1e10);
 		assertEquals(driverName, car.getDriverName());
-		car.turn(Vehicle.TURN_LEFT);
+		car.turn(90, Vehicle.TURN.LEFT);
 		assertEquals(deg - 90, car.getDeg(), 1e10);
-		
-		car.turn(Vehicle.TURN_RIGHT);
+		car.turn(90, Vehicle.TURN.RIGHT);
 		assertEquals(deg, car.getDeg(), 1e10);
 	}
 }

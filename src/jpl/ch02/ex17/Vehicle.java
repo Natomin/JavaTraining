@@ -1,13 +1,13 @@
 package jpl.ch02.ex17;
 //二つのturnメソッドと追加する
 public class Vehicle {
-	public static final int TURN_LEFT = -90;
-	public static final int TURN_RIGHT = 90;
 	private static int nextID;
 	private int id;
 	private String driverName;
 	private double velocity;
 	private double deg;
+	
+	public enum TURN{LEFT, RIGHT}//enum
 
 	// nextID,idの変更はコンストラクタの中でのみ行う
 	public Vehicle() {
@@ -28,12 +28,24 @@ public class Vehicle {
 	public void turn(double deg){
 		this.deg = this.deg + deg;
 	}
+
 	/**
-	 * TURN_LEFT、またはTURN_RIGHTと引数に取り、方角を90°変化させる関数
-	 * @param turn　TURN_LEFT、またはTURN_RIGHTと引数に取る
+	 * 角度degだけ方向directionに変化させる関数
+	 * @param deg:変化させる角度
+	 * @param direction:変化させる方向 turn.LEFTまたはturn.RIGHT
 	 */
-	public void turn(int turn){
-		this.deg = this.deg + turn;
+	public void turn(double deg, TURN direction){
+		switch (direction) {
+		case RIGHT:
+			this.deg = this.deg + deg;
+			break;
+		case LEFT:
+			this.deg = this.deg - deg;
+			break;
+		default:
+			System.out.println("IllegalAegumrnt");
+			break;
+		}
 	}
 
 	public void changeSpeed(double velocity){
