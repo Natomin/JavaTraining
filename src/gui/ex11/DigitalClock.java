@@ -6,13 +6,13 @@ import java.awt.*;
 
 public class DigitalClock extends Frame {
 	private String time = "00:00.00";
-	public DigitalClock(int hour, int minute, int second) {
+	public DigitalClock() {
 		super("DigitalClock");
 		setSize(220, 100);
 		addWindowListener(new MyWindowAdapter());
 		this.setVisible(true);
 
-		Thread subTread = new Thread(new UpdateTimeRunnable(this, hour, minute, second));
+		Thread subTread = new Thread(new UpdateTimeRunnable(this));
 		subTread.start();
 	}
 	
