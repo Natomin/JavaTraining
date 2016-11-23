@@ -1,4 +1,4 @@
-package gui.ex11;
+package gui.ex11.gui;
 
 import java.time.LocalTime;
 

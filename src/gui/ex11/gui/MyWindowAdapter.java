@@ -1,4 +1,4 @@
-package gui.ex11;
+package gui.ex11.gui;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

@@ -1,13 +1,21 @@
-package jpl.ch02.ex18;
-
-public class Vehicle {
-	private static final int TURN_LEFT = -90;
-	private static final int TURN_RIGHT = 90;
+package jpl.ch03.ex08;
+//VehicleクラスをCloneable型にする
+//finalのフィールド、配列がないのでObject.cloneで単純な値のコピー行う
+public class Vehicle implements Cloneable{
+	public enum Direction{LEFT, RIGHT}
 	private static int nextID;
 	private int id;
 	private String driverName;
 	private double velocity;
 	private double deg;
+	
+	public Vehicle clone() throws CloneNotSupportedException{
+		try{
+			return (Vehicle) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new InternalError(e.toString());
+		}
+	}
 
 	// nextID,idの変更はコンストラクタの中でのみ行う
 	public Vehicle() {
@@ -26,8 +34,17 @@ public class Vehicle {
 		this.deg = this.deg + deg;
 	}
 	
-	public void turn(int turn){
-		this.deg = this.deg + turn;
+	public void turn(Direction turn , int deg){
+		switch (turn) {
+		case LEFT:
+			this.deg = -deg;
+			break;
+		case RIGHT:
+			this.deg = deg;
+			break;
+		default:
+			break;
+		}
 	}
 
 	public void changeSpeed(double velocity){
@@ -42,31 +59,31 @@ public class Vehicle {
 		return nextID;
 	}
 
-	public int getId() {
+	public final int getId() {
 		return id;
 	}
 
-	public String getDriverName() {
+	public final String getDriverName() {
 		return driverName;
 	}
 
-	public void setDriverName(String driverName) {
+	public final void setDriverName(String driverName) {
 		this.driverName = driverName;
 	}
 
-	public double getVelocity() {
+	public final double getVelocity() {
 		return velocity;
 	}
 
-	public void setVelocity(double velocity) {
+	public final void setVelocity(double velocity) {
 		this.velocity = velocity;
 	}
 
-	public double getDeg() {
+	public final double getDeg() {
 		return deg;
 	}
 
-	public void setDeg(double deg) {
+	public final void setDeg(double deg) {
 		this.deg = deg;
 	}
 
@@ -80,5 +97,4 @@ public class Vehicle {
 		System.out.println("driverName:" + driverName);
 		System.out.println("");
 	}
-
 }
