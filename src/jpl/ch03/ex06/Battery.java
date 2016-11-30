@@ -9,13 +9,14 @@ public class Battery extends EnergySource{
 	}
 	@Override
 	fuelLevel empty() {
-		if(battery >= 90){
+		if(battery >= 80){
 			return fuelLevel.FULL;
-		}else if(10 < battery || battery < 80){
+		}else if(10 < battery && battery < 80){
 			return fuelLevel.HALF;
-		}else{
+		}else if(battery <= 10){
 			return fuelLevel.EMPTY;
 		}
+		return null;
 	}
 	public int getBattery() {
 		return battery;

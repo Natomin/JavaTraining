@@ -11,7 +11,7 @@ public class BankAccount {
 	private long number;	//講座番号
 	private long balance;	//残高（セント）
 	private Action lastAct;	//最後に行われた処理
-	private History history;
+	private History history = new History();
 
 	public class Action{
 		private String act;

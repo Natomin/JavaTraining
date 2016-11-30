@@ -12,7 +12,7 @@ public class GasTank extends EnergySource{
 	fuelLevel empty() {
 		if(gasoline >= 50){
 			return fuelLevel.FULL;
-		}else if(5 < gasoline || gasoline < 50){
+		}else if(5 < gasoline && gasoline < 50){
 			return fuelLevel.HALF;
 		}else{
 			return fuelLevel.EMPTY;

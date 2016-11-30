@@ -27,9 +27,9 @@ public class SortMetrics implements Cloneable{
 	}
 	
 	public String toString(){
-		return prebeCnt + "prebeCnt" +
-				compareCnt + "compareCnt" +
-				swapCnt + "swapCnt";
+		return prebeCnt + " prebes " +
+				compareCnt + " compares " +
+				swapCnt + " swaps ";
 	}
 	
 	public SortMetrics clone(){

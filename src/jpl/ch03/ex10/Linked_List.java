@@ -1,7 +1,5 @@
 package jpl.ch03.ex10;
 
-import jpl.ch02.ex16.Node;
-
 public class Linked_List implements Cloneable {
 	private Node head = new Node(null);
 	private Node prev = new Node(null);
@@ -19,9 +17,46 @@ public class Linked_List implements Cloneable {
 		Linked_List list;
 		try {
 			list = (Linked_List) super.clone();
+			int i = 0;
+			if (head.data == null) {
+			} else {
+//				list.head = this.head.clone();
+//				list.prev = list.head;
+//				this.prev = this.head;
+//				i++;
+//				while (i < list.nodeNum()) {//テストが終わってくれない
+//					this.prev = this.prev.next;
+//					list.prev.next = this.prev.clone();
+//					list.prev = list.prev.next;
+//					i++;
+//				}
+			}
 			return list;
 		} catch (CloneNotSupportedException e) {
 			throw new InternalError(e.toString());
+		}
+	}
+
+	/**
+	 *テスト用メソッド
+	 *リストの最初のノードをリストの最後に移動するメソッド
+	 */
+	public void rotation(){
+		Node end = new Node(null);
+		int i = 0;
+		if (head.data == null) {
+		} else {
+			prev = head;
+			i++;
+			while(i < this.nodeNum()){
+				prev = prev.next;
+				i++;
+			}
+			end = prev;
+		prev = head;
+		head = head.next;
+		prev.next = null;
+		end.next = prev;
 		}
 	}
 

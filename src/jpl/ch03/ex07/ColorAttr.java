@@ -4,7 +4,7 @@ public class ColorAttr extends Attr{
 	private ScreenColor myColor;
 	
 	public boolean equals(Object obj){//オーバーロード
-		if(this.toString() == obj.toString()){
+		if(this.toString().equals(obj.toString())){
 			return true;
 		}else{
 			return false;
@@ -12,7 +12,7 @@ public class ColorAttr extends Attr{
 	}
 	
 	public int hashCode(){//オーバーロード
-		int resreturn = myColor.hashCode() % 2 + 10;
+		int resreturn = myColor.hashCode() * 2;
 		return resreturn;
 	}
 
