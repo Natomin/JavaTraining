@@ -17,19 +17,16 @@ public class Linked_List implements Cloneable {
 		Linked_List list;
 		try {
 			list = (Linked_List) super.clone();
-			int i = 0;
 			if (head.data == null) {
 			} else {
-//				list.head = this.head.clone();
-//				list.prev = list.head;
-//				this.prev = this.head;
-//				i++;
-//				while (i < list.nodeNum()) {//テストが終わってくれない
-//					this.prev = this.prev.next;
-//					list.prev.next = this.prev.clone();
-//					list.prev = list.prev.next;
-//					i++;
-//				}
+				list.head = this.head.clone();
+				list.prev = list.head;
+				this.prev = this.head;
+				while (this.prev.next == null) {
+					this.prev = this.prev.next;
+					list.prev.next = this.prev.clone();
+					list.prev = list.prev.next;
+				}
 			}
 			return list;
 		} catch (CloneNotSupportedException e) {

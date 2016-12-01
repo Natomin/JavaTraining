@@ -30,22 +30,15 @@ public class Linked_ListTest {
 		list.rotation();
 		System.out.println(list.toString());
 		System.out.println(listClone.toString());
-		System.out.println(list.nodeNum());
-		System.out.println(listClone.nodeNum());
 		
 		list.rotation();
 		System.out.println(list.toString());
 		System.out.println(listClone.toString());
-		System.out.println(list.nodeNum());
-		System.out.println(listClone.nodeNum());
 		
 		list.rotation();
 		System.out.println(list.toString());
 		System.out.println(listClone.toString());
-		System.out.println(list.nodeNum());
-		System.out.println(listClone.nodeNum());
 		//clone側には影響しないことを確認
-		assertNotNull(listClone);
 	}
 
 }
