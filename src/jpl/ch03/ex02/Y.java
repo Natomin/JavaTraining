@@ -4,11 +4,11 @@ public class Y extends X{
 	protected int yMask = 0xff00;
 	
 	public Y(){
-		printY();
+		print();
 		fullMask |= yMask;
-		printY();
+		print();
 	}
-	public void printY(){
+	public void print(){
 		System.out.printf("(y) xMask:%x  ", xMask);
 		System.out.printf(" yMask:%x  ", yMask);
 		System.out.printf(" fullMask:%x%n", fullMask );

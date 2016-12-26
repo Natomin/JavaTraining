@@ -5,15 +5,15 @@ public class X {
 	protected int fullMask;
 	
 	public X(){
-		printX();
+		print();
 		fullMask = xMask;
-		printX();
+		print();
 	}
 	
 	public int maik(int orig){
 		return (orig & fullMask);
 	}
-	public void printX(){
+	public void print(){
 		System.out.printf("(x) xMask:%x  ", xMask);
 		System.out.printf("              fullMask:%x%n", fullMask );
 	}
