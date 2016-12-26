@@ -1,4 +1,4 @@
-package gui.ex11.gui;
+package gui.ex11;
 
 public abstract class Subject {
 	public void setCurrentTime(Observer clockFlame){

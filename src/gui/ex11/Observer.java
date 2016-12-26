@@ -1,4 +1,4 @@
-package gui.ex11.gui;
+package gui.ex11;
 
 public interface Observer {
 	public void update();

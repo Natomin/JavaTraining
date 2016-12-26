@@ -1,4 +1,4 @@
-package gui.ex11.gui;
+package gui.ex11;
 
 //AWTのFrameを使用してデジタル時計を作成する
 //paintメソッド内でGraphicsを使用して描画する。
