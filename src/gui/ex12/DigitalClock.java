@@ -10,17 +10,15 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import javax.swing.plaf.FontUIResource;
 
 public class DigitalClock extends Frame {
 	private String time = "00:00.00";
@@ -51,7 +49,6 @@ public class DigitalClock extends Frame {
 		// "メニュー"に"プロパティ"を追加する
 		MenuItem property = menu.add(new MenuItem("プロパティ"));
 
-//		DigitalClock thisFrame = this;
 		// プロパティにアクション（ダイアログ表示）を追加する
 		property.addActionListener(new ActionListener() {
 			@Override
@@ -60,11 +57,12 @@ public class DigitalClock extends Frame {
 				Dialog propertyDialog = new Dialog(thisFrame, "プロパティ");
 				propertyDialog.setLayout(null);
 				propertyDialog.setSize(400, 300);
+				propertyDialog.setResizable(false);
 				propertyDialog.setVisible(true);
 				propertyDialog.addWindowListener(new WindowAdapter() {
 					public void windowClosing(WindowEvent e) {
 						// リソースの解放。×を押すとダイアログが閉じるように見える。
-						dispose();// 呼び出し元のフレームも消えちゃう
+						propertyDialog.dispose();
 					}
 				});
 				PropertyChoiceList choiceList = new PropertyChoiceList();
@@ -121,21 +119,28 @@ public class DigitalClock extends Frame {
 	}
 
 	// 渡された現在時刻の値をセットする
-	public void setTime(String newTime) {
-		time = newTime;
+	public void setTime(String hour, String minute, String seconds) {
+		time = hour + ":" + minute + "." + seconds;
 	}
 
 	// 描画処理
 	public void paint(Graphics g) {
 		g.setFont(font);
-		g.setColor(textColor);
 		FontMetrics fm = g.getFontMetrics();
-		Dimension newSize = new Dimension(fm.stringWidth(time), fm.getAscent() + fm.getDescent() + fm.getLeading() + 20);
+		Dimension newSize = new Dimension(fm.stringWidth(time) + 20,
+				fm.getAscent() + fm.getDescent() + fm.getLeading() + 20);
 		thisFrame.setSize(newSize);
+
 		Dimension d = getSize();
+		Image back = createImage(d.width, d.height);
+		Graphics buffer = back.getGraphics();
+		buffer.setFont(font);
+		buffer.setColor(textColor);
+
 		int x = d.width / 2 - fm.stringWidth(time) / 2;
 		int y = d.height / 2 + fm.getDescent() + 20;
-		g.drawString(time, x, y);
+		buffer.drawString(time, x, y);
+		g.drawImage(back, 0, 0, this);
 	}
 
 	public void setFontSize(int fontSize) {
