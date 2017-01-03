@@ -1,0 +1,27 @@
+次の式のどれが正しくないかを判断する。正しい式であれば、その型と値がなんであるか考える
+(1) 3 << 2L - 1（正しい）
+型：int　値：6
+(2) (3L << 2) - 1（正しい）
+型：long　値：11
+(3) 10 < 12 == 6 > 17（正しい）
+型：boolean　値：false
+(4)10 << 12 == 6 >> 17（正しい）
+型：boolean　値：false
+(5)13.5e-1 % Float.POSITIVE_INFINITY（正しくない?）
+型：double　値：1.35(?)
+(6)Float.POSITIVE_INFINITY + Double.NEGATIVE_INFINITY（正しい）
+型：double　値：NaN
+(7)Double.POSITIVE_INFINITY - Float.NEGATIVE_INFINITY（正しい）
+型：double　値：Infinity
+(8)0.0 / -0.0 == -0.0 / 0.0（正しい）
+型：boolean　値：false（NaN == NaNはfalse）
+(9)Integer.MAX_VALUE + Integer.MIN_VALUE（正しくない?）
+型：int　値：-1（オーバーフロー）
+(10)Long.MAX_VALUE + 5（正しくない?）
+型：long　値：-9223372036854775804（オーバーフロー）
+(11)(short)5 * (byte)10;（正しい）
+型：short　値：50
+(12)(i<15 ? 1.72e3f : 0)（正しい）
+型：float　値：1720.0 または 0.0（iの値による）
+(13)i++ + i++ + --i;（正しい）
+型：int　値：11
