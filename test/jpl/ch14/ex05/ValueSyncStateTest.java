@@ -30,12 +30,10 @@ public class ValueSyncStateTest {
 
 	@Test
 	public void test() {
-		new TestAddThread().start();
-		new TestSubThread().start();
-		new TestAddThread().start();
-		new TestSubThread().start();
-		new TestAddThread().start();
-		new TestSubThread().start();
+		for(int i = 0; i < 100; i++){
+			new TestAddThread().start();
+			new TestSubThread().start();
+		}
 
 		
 	}

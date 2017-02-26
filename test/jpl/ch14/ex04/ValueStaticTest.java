@@ -3,6 +3,7 @@ package jpl.ch14.ex04;
 
 import org.junit.Test;
 
+
 public class ValueStaticTest {	
 	private class TestThread extends Thread{
 		public void run(){
@@ -18,13 +19,9 @@ public class ValueStaticTest {
 
 	@Test
 	public void test() {
-		new TestThread().start();
-		new TestThread().start();
-		new TestThread().start();
-		new TestThread().start();
-		new TestThread().start();
-		new TestThread().start();
-		
+		for(int i = 0; i < 100; i++){
+			new TestThread().start();
+		}
 	}
 
 }

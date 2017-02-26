@@ -1,7 +1,9 @@
 package jpl.ch14.ex03;
 
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
 
 public class ValueTest {
 	private Value value = new Value(); 
@@ -9,7 +11,7 @@ public class ValueTest {
 	private class TestThread extends Thread{
 		public void run(){
 			try{
-				while(true){
+				for(int i = 0; i < 100; i++){
 					value.add();
 					Thread.sleep(1);
 				}
@@ -20,12 +22,18 @@ public class ValueTest {
 
 	@Test
 	public void test() {
-		new TestThread().start();
-		new TestThread().start();
-		new TestThread().start();
-		new TestThread().start();
-		new TestThread().start();
-		new TestThread().start();
+		for(int i = 0; i < 100; i++){
+			new TestThread().start();
+		}
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		assertEquals(10000, value.getValue());
+		
+		
 		
 	}
 

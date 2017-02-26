@@ -9,6 +9,9 @@ public class Value {
 		value++;
 		System.out.println(value);
 	}
+	public int getValue(){
+		return value;
+	}
 	
 
 }
