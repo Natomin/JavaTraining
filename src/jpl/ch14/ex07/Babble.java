@@ -22,7 +22,6 @@ public class Babble extends Thread{
 		doYield = new Boolean(args[0]).booleanValue();
 		howOften = Integer.parseInt(args[1]);
 		
-		//
 		for(int i = 2; i < args.length; i++){
 			new Babble(args[i]).start();
 		}

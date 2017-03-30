@@ -8,16 +8,17 @@ public class Main {
 		
 		jareth.becomeFriend(cory);
 		cory.becomeFriend(jareth);
-		
-		new Thread(new Runnable() {
-			@Override
-			public void run() {jareth.hug();}
-			}, "Thread1").start();
-		
-		new Thread(new Runnable() {
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {jareth.hug();}
+				}, "Thread1").start();
 			
-			@Override
-			public void run() {cory.hug();}
-		}, "Thread2").start();
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {cory.hug();}
+			}, "Thread2").start();
+
 	}
 }
