@@ -29,4 +29,9 @@ public class StringCounterTest {
 		assertTrue(charCount.countString("migimiminomiginiminimigimimi", "migimimi") == 2);
 	}
 
+	@Test
+	public void test5() {
+		StringCounter charCount = new StringCounter();
+		assertTrue(charCount.countString("aaaaa", "aa") == 4);
+	}
 }
