@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 //Objectクラスに関しては何も表示しないようにTypeDescを修正する。
-//Object型に対するClassオブジェクトの参照を仕様する。
+//Object型に対するClassオブジェクトの参照を使用する。
 public class TypeDesc {
 	public static void main(String[] args){
 		TypeDesc dect = new TypeDesc();
