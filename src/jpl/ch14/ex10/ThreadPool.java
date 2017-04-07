@@ -59,7 +59,6 @@ public class ThreadPool {
 		for (LoopThread l : thread) {
 			l.start();
 		}
-		System.out.println("start:" + Thread.activeCount());
 	}
 
 	/**
@@ -69,7 +68,6 @@ public class ThreadPool {
 	 *             if threads has not been started.
 	 */
 	public synchronized void stop() {
-		System.out.println("stop:" + Thread.activeCount());
 		if (!isStart) {
 			throw new IllegalStateException();
 		}
@@ -86,7 +84,6 @@ public class ThreadPool {
 			}
 		} while (activeCount > 0);
 		
-		System.out.println("stop2:" + Thread.activeCount());
 	}
 
 	/**
