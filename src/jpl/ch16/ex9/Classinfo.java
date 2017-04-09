@@ -1,6 +1,5 @@
 package jpl.ch16.ex9;
 
-import java.awt.Color;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
