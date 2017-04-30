@@ -12,11 +12,12 @@ public class DigitalClockFrame extends JFrame implements Observer, ClockFrame {
 	private GraphicComponrnts graphic = new GraphicComponrnts();
 
 	public DigitalClockFrame() {
-		setSize(460, 150);
-		setVisible(true);
+		setSize(470, 150);
+		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// Components追加
 		getContentPane().add(graphic);
+		setVisible(true);
 	}
 
 	@Override
@@ -42,7 +43,5 @@ public class DigitalClockFrame extends JFrame implements Observer, ClockFrame {
 		public void setTime(String time) {
 			this.time = time;
 		}
-
 	}
-
 }
