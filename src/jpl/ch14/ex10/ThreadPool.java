@@ -20,6 +20,7 @@ public class ThreadPool {
 	private Queue queue;
 	private LoopThread[] thread;
 
+
 	/**
 	 * Constructs ThreadPool.
 	 *
@@ -48,14 +49,12 @@ public class ThreadPool {
 	 * @throws IllegalStateException
 	 *             if threads has been already started.
 	 */
-	public void start() {
+	public synchronized void start() {
 
-		synchronized (this) {
 			if (isStart) {
 				throw new IllegalStateException();
 			}
 			isStart = true;
-		}
 		for (LoopThread l : thread) {
 			l.start();
 		}
