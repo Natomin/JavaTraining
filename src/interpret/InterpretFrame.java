@@ -249,7 +249,7 @@ public class InterpretFrame extends Frame {
 						output.setText("例外\n" + e1.toString());
 					} catch (IllegalArgumentException e1) {
 						e1.printStackTrace();
-						output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
+						output.setText("例外\n" + "引数が不正です\n" + e1.toString());
 					} catch (InvocationTargetException e1) {
 						e1.printStackTrace();
 						output.setText("例外\n" + e1.getCause());
@@ -316,7 +316,7 @@ public class InterpretFrame extends Frame {
 							} catch (IllegalArgumentException e1) {
 								// TODO 自動生成された catch ブロック
 								e1.printStackTrace();
-								output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
+								output.setText("例外\n" + "引数が不正です\n" + e1.toString());
 							} catch (IllegalAccessException e1) {
 								// TODO 自動生成された catch ブロック
 								e1.printStackTrace();
@@ -346,7 +346,7 @@ public class InterpretFrame extends Frame {
 					output.setText("フィールド書き換え\n");
 				} catch (IllegalArgumentException e1) {
 					e1.printStackTrace();
-					output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
+					output.setText("例外\n" + "引数が不正です\n" + e1.toString());
 				} catch (IllegalAccessException e1) {
 					e1.printStackTrace();
 					output.setText("例外\n" + e1.toString());
@@ -375,31 +375,57 @@ public class InterpretFrame extends Frame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fieldList.removeAll();
-				int selectedIndex = instanceList.getSelectedIndex();// 選択されたインスタンスのIndex取得
+				methodList.removeAll();
+				int selectedIndex = instanceList.getSelectedIndex();// 選択されているインスタンスのIndex取得
 				if (selectedIndex == -1) {
 					output.setText("エラー\n" + "インスタンスを選択してください");
-				} else {
-					Object selectedInst = allInstance.get(selectedIndex);// 選択されたインスタンスオブジェクト取得
-					Class<?> selectedInstType = selectedInst.getClass();// 選択されたインスタンスのクラスオブジェクト取得
-
-					allMethod = getAllMethod(selectedInstType);
-					int i = 0;
-					// TODO 全てのメソッドを取得する
-					for (Method m : allMethod) {
-						i++;
-						m.setAccessible(true);// privateへのアクセスを有効にする
-						Class<?>[] params = m.getParameterTypes();
-						String strParams = "(";
-						for (int j = 0; j < params.length; j++) {
-							strParams = strParams + params[j].getSimpleName();
-							if (j < params.length - 1) {// 引数の間にカンマ入れる
-								strParams = strParams + ",";
+				} else
+					LABEL1: {
+						String selectedItem = instanceList.getSelectedItem();
+						Object selectedInst;
+						// 選択されているのが配列のインスタンスか確認
+						if (selectedItem.charAt(selectedItem.length() - 1) == ']') {
+							int selectedArrIndex = arrayList.getSelectedIndex();// 選択されている配列要素のIndexを取得
+							if (selectedArrIndex == -1) {
+								output.setText("配列の要素を選択してください");
+								break LABEL1;
 							}
+							String selectedArrItem = arrayList.getItem(selectedArrIndex);
+							// 選択されているインスタンスと配列要素の対応が正しいか確認（インスタンスの番号が同じか比較）
+							if (selectedArrItem.charAt(1) == selectedItem.charAt(1)) {
+								Object[] selectedArrInst = (Object[]) allInstance.get(selectedIndex);// 選択されている配列を取得
+								selectedInst = selectedArrInst[selectedArrIndex];// 選択されている配列の要素を取得
+							} else {
+								output.setText("viewボタンを押して、正しく配列要素を選択してください");
+								break LABEL1;
+							}
+						} else {
+							selectedInst = allInstance.get(selectedIndex);// 選択されているインスタンスを取得
 						}
-						strParams = strParams + ")";
-						methodList.add("(" + i + ") " + m.getName() + strParams);
+						if (selectedInst == null) {
+							output.setText("選択したオブジェクトはnullを参照しています");
+							break LABEL1;
+						}
+						Class<?> selectedInstType = selectedInst.getClass();
+						allMethod = getAllMethod(selectedInstType);
+						int i = 0;
+						// TODO 全てのメソッドを取得する
+						for (Method m : allMethod) {
+							i++;
+							m.setAccessible(true);// privateへのアクセスを有効にする
+							Class<?>[] params = m.getParameterTypes();
+							String strParams = "(";
+							for (int j = 0; j < params.length; j++) {
+								strParams = strParams + params[j].getSimpleName();
+								if (j < params.length - 1) {// 引数の間にカンマ入れる
+									strParams = strParams + ",";
+								}
+							}
+							strParams = strParams + ")";
+							methodList.add("(" + i + ") " + m.getName() + strParams);
+						}
+						executeMethodObj = selectedInst;
 					}
-				}
 			}
 		});
 
@@ -415,59 +441,54 @@ public class InterpretFrame extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selectedInstIndex = instanceList.getSelectedIndex();// 選択されたインスタンスのIndex取得
-				if (selectedInstIndex == -1) {
-					output.setText("エラー\n" + "実行するメソッドを選択してください");
-				} else {
-					Object selectedInst = allInstance.get(selectedInstIndex);// 選択されたインスタンス取得
-					int selectedMethodIndex = methodList.getSelectedIndex();// 選択されたメソッドのIndex取得
-					java.lang.reflect.Type[] paramTypes = allMethod[selectedMethodIndex].getGenericParameterTypes();// メソッド引数の型
-					Object[] params = new Object[paramTypes.length];// 引数を格納する配列
-					params = toParamArr(methodParams.getText());// 入力されたパラメーター文字列をobject配列に変換
+				Object selectedInst = executeMethodObj;// 選択されたインスタンス取得
+				int selectedMethodIndex = methodList.getSelectedIndex();// 選択されたメソッドのIndex取得
+				java.lang.reflect.Type[] paramTypes = allMethod[selectedMethodIndex].getGenericParameterTypes();// メソッド引数の型
+				Object[] params = new Object[paramTypes.length];// 引数を格納する配列
+				params = toParamArr(methodParams.getText());// 入力されたパラメーター文字列をobject配列に変換
 
-					// TODO パラメーターの型チェック
-					if (params.length == 0) {// 引数なしメソッド実行
-						try {
-							Object returnVal = allMethod[methodList.getSelectedIndex()].invoke(selectedInst);
-							if (returnVal != null) {
-								output.setText("メソッド実行\n" + "戻り値:" + returnVal.toString());
-							} else {
-								output.setText("メソッド実行\n" + "戻り値:null");
-							}
-						} catch (IllegalAccessException e1) {
-							e1.printStackTrace();
-							output.setText("例外\n" + e1.toString());
-						} catch (IllegalArgumentException e1) {
-							e1.printStackTrace();
-							output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
-						} catch (java.lang.ArrayIndexOutOfBoundsException e1) {
-							e1.printStackTrace();
-							output.setText("エラー\n" + "フィールドを選択してください\n");
-						} catch (InvocationTargetException e1) {
-							e1.printStackTrace();
-							output.setText("例外\n" + e1.getCause());
+				// TODO パラメーターの型チェック
+				if (params.length == 0) {// 引数なしメソッド実行
+					try {
+						Object returnVal = allMethod[methodList.getSelectedIndex()].invoke(selectedInst);
+						if (returnVal != null) {
+							output.setText("メソッド実行\n" + "戻り値:" + returnVal.toString());
+						} else {
+							output.setText("メソッド実行\n" + "戻り値:null");
 						}
-					} else {// 引数ありメソッド実行
-						try {
-							Object returnVal = allMethod[methodList.getSelectedIndex()].invoke(selectedInst, params);
-							if (returnVal != null) {
-								output.setText("メソッド実行\n" + "戻り値:" + returnVal.toString());
-							} else {
-								output.setText("メソッド実行\n" + "戻り値:null");
-							}
-						} catch (IllegalAccessException e1) {
-							e1.printStackTrace();
-							output.setText("例外\n" + e1.toString());
-						} catch (IllegalArgumentException e1) {
-							e1.printStackTrace();
-							output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
-						} catch (InvocationTargetException e1) {
-							e1.printStackTrace();
-							output.setText("例外\n" + e1.getCause());
-						} catch (java.lang.ArrayIndexOutOfBoundsException e1) {
-							e1.printStackTrace();
-							output.setText("エラー\n" + "フィールドを選択してください\n");
+					} catch (IllegalAccessException e1) {
+						e1.printStackTrace();
+						output.setText("例外\n" + e1.toString());
+					} catch (IllegalArgumentException e1) {
+						e1.printStackTrace();
+						output.setText("例外\n" + "引数が不正です\n" + e1.toString());
+					} catch (java.lang.ArrayIndexOutOfBoundsException e1) {
+						e1.printStackTrace();
+						output.setText("エラー\n" + "フィールドを選択してください\n");
+					} catch (InvocationTargetException e1) {
+						e1.printStackTrace();
+						output.setText("例外\n" + e1.getCause());
+					}
+				} else {// 引数ありメソッド実行
+					try {
+						Object returnVal = allMethod[methodList.getSelectedIndex()].invoke(selectedInst, params);
+						if (returnVal != null) {
+							output.setText("メソッド実行\n" + "戻り値:" + returnVal.toString());
+						} else {
+							output.setText("メソッド実行\n" + "戻り値:null");
 						}
+					} catch (IllegalAccessException e1) {
+						e1.printStackTrace();
+						output.setText("例外\n" + e1.toString());
+					} catch (IllegalArgumentException e1) {
+						e1.printStackTrace();
+						output.setText("例外\n" + "引数が不正です\n" + e1.toString());
+					} catch (InvocationTargetException e1) {
+						e1.printStackTrace();
+						output.setText("例外\n" + e1.getCause());
+					} catch (java.lang.ArrayIndexOutOfBoundsException e1) {
+						e1.printStackTrace();
+						output.setText("エラー\n" + "フィールドを選択してください\n");
 					}
 				}
 			}
@@ -538,6 +559,11 @@ public class InterpretFrame extends Frame {
 				objParamsArray[i] = allInstance
 						.get(Integer.parseInt(strParamsArray[i].substring(1, strParamsArray[i].length())));
 				break;
+			case ARR_INSTANCE:
+				String[] instNum = strParamsArray[i].split("#");
+				Object[] inst = (Object[])allInstance.get(Integer.parseInt(instNum[0]));
+				objParamsArray[i] = inst[Integer.parseInt(instNum[1])];
+				break;
 			default:
 				break;
 			}
@@ -578,6 +604,11 @@ public class InterpretFrame extends Frame {
 			case INSTANCE:
 				objParams = allInstance.get(Integer.parseInt(strParams.substring(1, strParams.length())));// #を取り除く
 				break;
+			case ARR_INSTANCE:
+				String[] instNum = strParams.substring(1).split("#");
+				Object[] inst = (Object[])allInstance.get(Integer.parseInt(instNum[0]));
+				objParams = inst[Integer.parseInt(instNum[1])];
+				break;
 			default:
 				break;
 			}
@@ -600,7 +631,11 @@ public class InterpretFrame extends Frame {
 		} else if (params.equals("true") || params.equals("false")) {
 			return ParamsType.BOOLEAN;
 		} else if (params.charAt(0) == '#') {
-			return ParamsType.INSTANCE;
+			if(params.indexOf('#', 1) == -1){
+				return ParamsType.INSTANCE;
+			}else{
+				return ParamsType.ARR_INSTANCE;
+			}
 		} else {
 			return ParamsType.INT;
 		}

@@ -8,6 +8,7 @@ public enum ParamsType {
 	DOUBLE,
 	BOOLEAN,
 	INSTANCE,
+	ARR_INSTANCE,
 	UNSUPPORTED,
 
 }
