@@ -32,6 +32,8 @@ public class InterpretFrame extends Frame {
 	private int instNum;
 	private TextArea output;
 	private List instanceList = new List();
+	private Object changeFieldObj;
+	private Object executeMethodObj;
 
 	public InterpretFrame() {
 		super("Interpret");
@@ -131,7 +133,7 @@ public class InterpretFrame extends Frame {
 					Class<?> arrType = selectedInst.getClass();
 					for (int i = 0; i < selectedInst.length; i++) {
 						String arrTypeName = arrType.getSimpleName();
-						arrayList.add(arrTypeName + "[" + i + "]" + ":" + selectedInst[i]);
+						arrayList.add("#" + selectedIndex + "#" + i + arrTypeName + ":" + selectedInst[i]);
 					}
 				} else {
 					output.setText("配列を選択してださい");
@@ -174,6 +176,7 @@ public class InterpretFrame extends Frame {
 				} else {
 					output.setText("配列を選択してださい");
 				}
+				arrayList.removeAll();
 			}
 		});
 
@@ -239,10 +242,11 @@ public class InterpretFrame extends Frame {
 						instNum++;
 					} catch (InstantiationException e1) {
 						e1.printStackTrace();
-						output.setText("予期しないエラー\n");
+						output.setText(
+								"例外\n" + e1.toString() + "\n指定したクラスがインタフェースまたは abstract クラスであるためにインスタンスを生成できません");
 					} catch (IllegalAccessException e1) {
 						e1.printStackTrace();
-						output.setText("予期しないエラー\n");
+						output.setText("例外\n" + e1.toString());
 					} catch (IllegalArgumentException e1) {
 						e1.printStackTrace();
 						output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
@@ -274,27 +278,53 @@ public class InterpretFrame extends Frame {
 				int selectedIndex = instanceList.getSelectedIndex();// 選択されているインスタンスのIndex取得
 				if (selectedIndex == -1) {
 					output.setText("エラー\n" + "インスタンスを選択してください");
-				} else {
-					Object selectedInst = allInstance.get(selectedIndex);
-					Class<?> selectedInstType = selectedInst.getClass();
+				} else
+					LABEL1: {
+						String selectedItem = instanceList.getSelectedItem();
+						Object selectedInst;
+						// 選択されているのが配列のインスタンスか確認
+						if (selectedItem.charAt(selectedItem.length() - 1) == ']') {
+							int selectedArrIndex = arrayList.getSelectedIndex();// 選択されている配列要素のIndexを取得
+							if (selectedArrIndex == -1) {
+								output.setText("配列の要素を選択してください");
+								break LABEL1;
+							}
+							String selectedArrItem = arrayList.getItem(selectedArrIndex);
 
-					allField = selectedInstType.getDeclaredFields();
-					// TODO 全てのフィールドを取得する
-					for (Field f : allField) {
-						f.setAccessible(true);
-						try {
-							fieldList.add(f.getName() + ":" + f.get(selectedInst));
-						} catch (IllegalArgumentException e1) {
-							// TODO 自動生成された catch ブロック
-							e1.printStackTrace();
-							output.setText("エラー\n" + "引数が不正です" + e1.toString());
-						} catch (IllegalAccessException e1) {
-							// TODO 自動生成された catch ブロック
-							e1.printStackTrace();
-							output.setText("予期しないエラー\n");
+							// 選択されているインスタンスと配列要素の対応が正しいか確認（インスタンスの番号が同じか比較）
+							if (selectedArrItem.charAt(1) == selectedItem.charAt(1)) {
+								Object[] selectedArrInst = (Object[]) allInstance.get(selectedIndex);// 選択されている配列を取得
+								selectedInst = selectedArrInst[selectedArrIndex];// 選択されている配列の要素を取得
+							} else {
+								output.setText("viewボタンを押して、正しく配列要素を選択してください");
+								break LABEL1;
+							}
+						} else {
+							selectedInst = allInstance.get(selectedIndex);// 選択されているインスタンスを取得
 						}
+						if (selectedInst == null) {
+							output.setText("選択したオブジェクトはnullを参照しています");
+							break LABEL1;
+						}
+						Class<?> selectedInstType = selectedInst.getClass();
+						allField = selectedInstType.getDeclaredFields();
+						// TODO 全てのフィールドを取得する
+						for (Field f : allField) {
+							f.setAccessible(true);
+							try {
+								fieldList.add(f.getName() + ":" + f.get(selectedInst));
+							} catch (IllegalArgumentException e1) {
+								// TODO 自動生成された catch ブロック
+								e1.printStackTrace();
+								output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
+							} catch (IllegalAccessException e1) {
+								// TODO 自動生成された catch ブロック
+								e1.printStackTrace();
+								output.setText("例外\n" + e1.toString());
+							}
+						}
+						changeFieldObj = selectedInst;
 					}
-				}
 			}
 		});
 
@@ -307,24 +337,24 @@ public class InterpretFrame extends Frame {
 		changeField.setBounds(245, 635, 70, 30);
 		add(changeField);
 		changeField.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object newObj = toObj(newField.getText());
-				int selectedIndex = instanceList.getSelectedIndex();// 選択されたインスタンスのIndex取得
-				Object selectedInst = allInstance.get(selectedIndex);// 選択されたインスタンスオブジェクト取得
+				Object selectedInst = changeFieldObj;// フィールド変更を実行するオブジェクト取得
 				try {
 					allField[fieldList.getSelectedIndex()].set(selectedInst, newObj);
+					output.setText("フィールド書き換え\n");
 				} catch (IllegalArgumentException e1) {
 					e1.printStackTrace();
-					output.setText("エラー\n" + "引数が不正です" + e1.toString());
+					output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
 				} catch (IllegalAccessException e1) {
 					e1.printStackTrace();
-					output.setText("予期しないエラー\n");
+					output.setText("例外\n" + e1.toString());
 				} catch (java.lang.ArrayIndexOutOfBoundsException e1) {
 					e1.printStackTrace();
 					output.setText("エラー\n" + "フィールドを選択してください\n");
 				}
+				fieldList.removeAll();
 			}
 		});
 
@@ -398,13 +428,18 @@ public class InterpretFrame extends Frame {
 					// TODO パラメーターの型チェック
 					if (params.length == 0) {// 引数なしメソッド実行
 						try {
-							allMethod[methodList.getSelectedIndex()].invoke(selectedInst);
+							Object returnVal = allMethod[methodList.getSelectedIndex()].invoke(selectedInst);
+							if (returnVal != null) {
+								output.setText("メソッド実行\n" + "戻り値:" + returnVal.toString());
+							} else {
+								output.setText("メソッド実行\n" + "戻り値:null");
+							}
 						} catch (IllegalAccessException e1) {
 							e1.printStackTrace();
-							output.setText("予期しないエラー\n");
+							output.setText("例外\n" + e1.toString());
 						} catch (IllegalArgumentException e1) {
 							e1.printStackTrace();
-							output.setText("エラー\n" + "引数が不正です" + e1.toString());
+							output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
 						} catch (java.lang.ArrayIndexOutOfBoundsException e1) {
 							e1.printStackTrace();
 							output.setText("エラー\n" + "フィールドを選択してください\n");
@@ -414,13 +449,18 @@ public class InterpretFrame extends Frame {
 						}
 					} else {// 引数ありメソッド実行
 						try {
-							allMethod[methodList.getSelectedIndex()].invoke(selectedInst, params);
+							Object returnVal = allMethod[methodList.getSelectedIndex()].invoke(selectedInst, params);
+							if (returnVal != null) {
+								output.setText("メソッド実行\n" + "戻り値:" + returnVal.toString());
+							} else {
+								output.setText("メソッド実行\n" + "戻り値:null");
+							}
 						} catch (IllegalAccessException e1) {
 							e1.printStackTrace();
-							output.setText("予期しないエラー\n");
+							output.setText("例外\n" + e1.toString());
 						} catch (IllegalArgumentException e1) {
 							e1.printStackTrace();
-							output.setText("エラー\n" + "引数が不正です" + e1.toString());
+							output.setText("エラー\n" + "引数が不正です\n" + e1.toString());
 						} catch (InvocationTargetException e1) {
 							e1.printStackTrace();
 							output.setText("例外\n" + e1.getCause());
@@ -464,6 +504,12 @@ public class InterpretFrame extends Frame {
 		return strParamsArray;
 	}
 
+	/**
+	 * paramsを文字列で受け取って、各paramごとに対応するオブジェクトに変換し、順番にObject配列に格納するメソッド
+	 * 
+	 * @param strParamsArray
+	 * @return Object型の配列
+	 */
 	public Object[] toObjArray(String[] strParamsArray) {// String配列を対応する型オブジェクトの配列にするメソッド
 		Object[] objParamsArray = new Object[strParamsArray.length];
 		for (int i = 0; i < strParamsArray.length; i++) {
@@ -499,6 +545,12 @@ public class InterpretFrame extends Frame {
 		return objParamsArray;
 	}
 
+	/**
+	 * 文字列を受け取り、interpret上で生成されたインスタンスを指しているか、プリミティブ型の値かを解析し、それぞれ対応する型のオブジェクトに変換して返すメソッド
+	 * 
+	 * @param strParams
+	 * @return Object型のオブジェクト
+	 */
 	public Object toObj(String strParams) {// Stringを対応する型オブジェクトにするメソッド
 		Object objParams = new Object();
 		try {
@@ -593,6 +645,13 @@ public class InterpretFrame extends Frame {
 	public <E> Object[] toArray(Class<?> type, int size) {
 		Object[] arr = (Object[]) Array.newInstance(type, size);
 		return arr;
+	}
+
+	/**
+	 * 二つの文字列の二文字目が正しいか調べるメソッド
+	 */
+	public boolean check(String str1, String str2) {
+		return (str1.charAt(1) == str2.charAt(1));
 	}
 
 }
