@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class Queue {
 	private int queueSize;
 	private ArrayList<Runnable> queue;
-	protected static final Object pushLock = new Object();
-	protected static final Object popLock = new Object();
+	//protected static final Object pushLock = new Object();
+	//protected static final Object popLock = new Object();
+	protected static final Object lock = new Object();
 
 	public Queue(int queueSize) {
 		this.queueSize = queueSize;
@@ -14,10 +15,11 @@ public class Queue {
 	}
 
 	public void push(Runnable runnable) {
-		synchronized(pushLock){
+		synchronized(lock){
 			while (queueSize <= queue.size()) {
 				try {
-					Thread.sleep(10);
+					wait();
+					//Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO 自動生成された catch ブロック
 					e.printStackTrace();
@@ -30,7 +32,7 @@ public class Queue {
 	}
 
 	public Runnable pop() {
-		synchronized(popLock){
+		synchronized(lock){
 			if (queue.size() < 1) {
 				return null;
 			}
