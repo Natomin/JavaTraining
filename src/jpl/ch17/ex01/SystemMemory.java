@@ -10,6 +10,7 @@ public class SystemMemory {
 		StringBuffer[] garbageObj = new StringBuffer[10000000];
 		isFree = rt.freeMemory();
 		System.out.println("生成後：" + isFree);
+		garbageObj = null;
 		rt.gc();
 		isFree = rt.freeMemory();
 		System.out.println("gc後　：" + isFree);

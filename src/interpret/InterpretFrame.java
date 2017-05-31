@@ -1,6 +1,7 @@
 package interpret;
 
 import java.awt.Button;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Label;
 import java.awt.List;
@@ -38,6 +39,7 @@ public class InterpretFrame extends Frame {
 	public InterpretFrame() {
 		super("Interpret");
 		setSize(650, 700);
+		setBackground(new Color(255,192,192));
 		setResizable(true);
 		setLayout(null);
 		addWindowListener(new WindowAdapter() {

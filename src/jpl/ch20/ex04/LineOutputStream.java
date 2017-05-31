@@ -6,7 +6,7 @@ import java.io.Reader;
 
 public class LineOutputStream extends FilterReader {
 
-	protected LineOutputStream(Reader in) {
+	public LineOutputStream(Reader in) {
 		super(in);
 	}
 

@@ -1,6 +1,8 @@
 package jpl.ch20.ex02;
 
 import java.io.FilterReader;
+//TODO バッファを引数で渡す方が足りていない
+//TODO byteにキャストして範囲を同じにしてから比較
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
