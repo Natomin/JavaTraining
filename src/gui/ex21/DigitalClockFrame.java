@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import gui.ex21.Subject.Observer;
 
-public class DigitalClockFrame extends JFrame implements Observer, ClockFrame {
+public class DigitalClockFrame extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
 	private GraphicComponrnts graphic = new GraphicComponrnts();
@@ -21,12 +21,9 @@ public class DigitalClockFrame extends JFrame implements Observer, ClockFrame {
 	}
 
 	@Override
-	public void update() {
-		graphic.repaint();
-	}
-
-	public void setTime(String time) {
+	public void update(String time) {
 		graphic.setTime(time);
+		graphic.repaint();
 	}
 
 	public class GraphicComponrnts extends JPanel {
