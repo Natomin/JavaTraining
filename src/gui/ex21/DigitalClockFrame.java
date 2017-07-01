@@ -1,6 +1,8 @@
 package gui.ex21;
 
 import java.awt.Graphics;
+import java.text.DecimalFormat;
+import java.time.LocalTime;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,6 +11,7 @@ import gui.ex21.Subject.Observer;
 public class DigitalClockFrame extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
+	private TimeKeeper timeKeeper = new TimeKeeper(this);
 	private GraphicComponrnts graphic = new GraphicComponrnts();
 
 	public DigitalClockFrame() {
@@ -18,11 +21,16 @@ public class DigitalClockFrame extends JFrame implements Observer{
 		// Components追加
 		getContentPane().add(graphic);
 		setVisible(true);
+		timeKeeper.run();
 	}
 
 	@Override
-	public void update(String time) {
-		graphic.setTime(time);
+	public void update() {
+		LocalTime time = timeKeeper.getTime();
+		String hour = new DecimalFormat("00").format(time.getHour());
+		String minute = new DecimalFormat("00").format(time.getMinute());
+		String seconds = new DecimalFormat("00").format(time.getSecond());// 一桁の場合は0で埋めて二桁にする処理
+		graphic.setTime(hour + ":" + minute + "." + seconds);
 		graphic.repaint();
 	}
 
@@ -42,3 +50,4 @@ public class DigitalClockFrame extends JFrame implements Observer{
 		}
 	}
 }
+
