@@ -37,9 +37,8 @@ public class StreamConector {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 			}
-		});
+		}).start();
 
 	}
 
@@ -49,7 +48,6 @@ public class StreamConector {
 
 			@Override
 			public void run() {
-
 				int readData = 0;
 				try {
 					while ((readData = in.read()) != -1) {
@@ -58,9 +56,8 @@ public class StreamConector {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 			}
-		});
+		}).start();
 
 	}
 }
