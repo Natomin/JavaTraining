@@ -1,11 +1,15 @@
 package jpl.ch22.ex07;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
+
+import jpl.ch22.ex11.ReadCSVTable;
 
 public class ReadCSV {
 	public static List<String[]> readCSVTable(Readable source, int cellsNum) throws IOException {
@@ -38,6 +42,17 @@ public class ReadCSV {
 		}
 		in.close();
 		return vals;
+	}
+	
+	public static void main(String[] args) throws FileNotFoundException, IOException {
+		List<String[]> list = ReadCSV.readCSVTable(new FileReader("./src/jpl/ch22/ex11/TestFile.txt"), 4);
+		for(String[] l :list){
+			for(String s : l){
+				System.out.print(s);
+			}
+			System.out.println();
+		}
+		
 	}
 
 }
