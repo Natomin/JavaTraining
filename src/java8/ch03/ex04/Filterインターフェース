@@ -1,0 +1,15 @@
+java.util.logging Filter
+javax.xml.stream.EventFilter
+java.io.FileFilter
+java.io .FilenameFilter
+org.w3c.dom.ls.LSSerializerFilter
+javax.management.NotificationFilter
+javax.imageio.spi.ServiceRegistry.Filter
+javax.xml.stream.StreamFilter
+
+Predicate<T>より付加価値のある関数型インターフェースは?
+
+java.nio.file.DirectoryStream.Filter<T>
+boolean accept(T entry) throws IOException　→例外をスローする
+java.io.FilenameFilter　
+boolean accept(File dir, String name)　→引数が2つある
