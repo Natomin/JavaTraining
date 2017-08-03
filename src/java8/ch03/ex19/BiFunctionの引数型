@@ -1,0 +1,3 @@
+BiFunction<U, ? super T, U>
+第一引数のUを ? super U と宣言しても問題はないが、BiFunctionの使われ方を考えると
+第一引数の型は常にUとなるため、? super Uとするメリットがない。よって? super Uと宣言するべきとはいえない。
