@@ -13,8 +13,8 @@ public class UncheckedExeption {
 	    return (t) -> {
 	        try {
 	            return f.apply(t);
-	        } catch (Exception ex) {
-	            throw new RuntimeException(ex);
+	        } catch (Throwable e) {
+	            throw new RuntimeException(e);
 	        }
 	    };
 	}

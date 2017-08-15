@@ -9,5 +9,5 @@ public class PrintFiles {
 			System.out.println(d);
 		}
 	}
-	//キャプチャされる変数はFile file
+	//キャプチャされる変数はsuffix
 }

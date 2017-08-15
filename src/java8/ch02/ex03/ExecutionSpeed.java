@@ -24,5 +24,17 @@ public class ExecutionSpeed {
 		// 単語に分割する：文字ではないものが区切り
 		words.parallelStream().filter(w -> w.length() > wordLength).count();
 	}
+	
+	public static void main(String[] args) throws IOException {
+		long beforeTime = System.nanoTime();
+		new ExecutionSpeed().countLongWords("./src/java8/ch02/ex01/alice.txt", 12);
+		long afterTime = System.nanoTime();
+		System.out.println("not parallel: " + (afterTime - beforeTime));
+		
+		beforeTime = System.nanoTime();
+		new ExecutionSpeed().countLongWordsParallel("./src/java8/ch02/ex01/alice.txt", 12);
+		afterTime = System.nanoTime();
+		System.out.println("    parallel: " + (afterTime - beforeTime));
+	}
 
 }

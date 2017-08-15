@@ -18,7 +18,7 @@ public class AsyncProcessing {
 			public void run(){
 				try {
 					second.run();
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					handler.accept(e);
 				}
 			}
