@@ -1,6 +1,5 @@
 package gui.reversi.frame;
 
-import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -10,7 +9,6 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class SetPlayerNameDialog extends Dialog {

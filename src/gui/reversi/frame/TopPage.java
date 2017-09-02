@@ -48,7 +48,7 @@ public class TopPage extends JFrame {
 		});
 		this.add(standalonePlay);
 
-		JButton connectPlay = new JButton("遠隔通信であそぶ");
+		JButton connectPlay = new JButton("通信対戦であそぶ");
 		connectPlay.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 16));
 		connectPlay.setBounds(270, 450, 200, 50);
 		this.add(connectPlay);

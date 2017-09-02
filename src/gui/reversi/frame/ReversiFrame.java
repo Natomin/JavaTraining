@@ -1,5 +1,6 @@
 package gui.reversi.frame;
 
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
@@ -32,6 +33,7 @@ public class ReversiFrame extends Dialog {
 		this.setBounds(0, 0, 600, 700);
 		this.setLayout(null);
 		this.setModalityType(DEFAULT_MODALITY_TYPE);
+		this.setBackground(new Color(0, 100, 0));
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				// リソースの解放。×を押すとダイアログが閉じるように見える。
@@ -57,6 +59,7 @@ public class ReversiFrame extends Dialog {
 
 				// 64個のボタンを生成
 				buttons[i][j] = new JButton();
+				buttons[i][j].setBackground(new Color(0, 100, 0));
 				buttons[i][j].setBounds(i * BUTTON_SIZE, j * BUTTON_SIZE + 25, BUTTON_SIZE, BUTTON_SIZE);
 				// buttonsがActionEventを受け取れるようにする(addActionListnerメソッドを実行)
 				// 引数はActionListner
@@ -94,13 +97,18 @@ public class ReversiFrame extends Dialog {
 				switch (state) {
 				case Reversi.NONE:
 					buttons[i][j].setText("");
+					buttons[i][j].setBackground(new Color(0, 100, 0));
 					break;
 
 				case Reversi.BLACK:
+					buttons[i][j].setFont(new Font("ＭＳ ゴシック", Font.BOLD, 80));
+					buttons[i][j].setBackground(new Color(0, 100, 0));
 					buttons[i][j].setText("●");
 					break;
 
 				case Reversi.WHITE:
+					buttons[i][j].setFont(new Font("ＭＳ ゴシック", Font.BOLD, 80));
+					buttons[i][j].setBackground(new Color(0, 100, 0));
 					buttons[i][j].setText("○");
 					break;
 				}
