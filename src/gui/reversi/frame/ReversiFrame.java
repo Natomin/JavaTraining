@@ -80,15 +80,6 @@ public class ReversiFrame extends Dialog {
 	}
 
 	private void update() {
-		String text;
-		// 現在のプレイヤーの色を取得してラベルに表示
-		if (reversi.getCurrentColor() == Reversi.BLACK) {
-			text = "●" + blackPlayerName + "さんの番です。";
-		} else {
-			text = "○" + whitePlayerName + "さんの番です。";
-		}
-		label.setText(text);
-
 		for (int i = 0; i < Reversi.BOARD_SIZE; i++) {
 			for (int j = 0; j < Reversi.BOARD_SIZE; j++) {
 				// 盤上の位置情報を取得しframe上に反映させる
@@ -113,6 +104,20 @@ public class ReversiFrame extends Dialog {
 					break;
 				}
 			}
+		}
+		
+		String text;
+		// 現在のプレイヤーの色を取得してラベルに表示
+		if (reversi.getCurrentColor() == Reversi.BLACK) {
+			text = "●" + blackPlayerName + "さんの番です。";
+		} else {
+			text = "○" + whitePlayerName + "さんの番です。";
+		}
+		label.setText(text);
+		
+		if(reversi.isFinished()){
+			FinishDialog finishDialog = new FinishDialog(this, "結果", reversi, blackPlayerName, whitePlayerName);
+			finishDialog.setVisible(true);
 		}
 
 	}
