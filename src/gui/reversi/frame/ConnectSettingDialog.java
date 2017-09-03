@@ -12,15 +12,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class SinglePlayerNameSettingDialog extends Dialog {
+public class ConnectSettingDialog extends Dialog {
 	public boolean isCheckingServer = true;
-	private JLabel nameLabel;
-	private JTextField playerName;
+	private JLabel playerColor;
+	private JLabel ipLabel;
+	private JTextField ip;
 	private JButton ok;
 	private JCheckBox serverCheckbox;
 	private JCheckBox clientCheckbox;
 	
-	public SinglePlayerNameSettingDialog(Frame owner, String title) {
+	public ConnectSettingDialog(Frame owner, String title) {
 		super(owner, title);
 		setLayout(null);
 		setSize(370, 250);
@@ -40,7 +41,9 @@ public class SinglePlayerNameSettingDialog extends Dialog {
 			public void actionPerformed(ActionEvent e) {
 				isCheckingServer = true;
 				clientCheckbox.setSelected(false);
-				updateLabel();
+				updatePlayerColorLabel();
+				ipLabel.setVisible(false);
+				ip.setVisible(false);
 			}
 		});
 		serverCheckbox.setBounds(30, 30, 150, 30);
@@ -52,20 +55,26 @@ public class SinglePlayerNameSettingDialog extends Dialog {
 			public void actionPerformed(ActionEvent e) {
 				isCheckingServer = false;
 				serverCheckbox.setSelected(false);
-				updateLabel();
+				updatePlayerColorLabel();
+				ipLabel.setVisible(true);
+				ip.setVisible(true);
 			}
 		});
 		clientCheckbox.setBounds(180, 30, 150, 30);
 		this.add(clientCheckbox);
 
-		nameLabel = new JLabel();
-		updateLabel();
-		nameLabel.setBounds(30, 110, 300, 30);
-		this.add(nameLabel);
+		playerColor = new JLabel();
+		updatePlayerColorLabel();
+		playerColor.setBounds(30, 85, 300, 30);
+		this.add(playerColor);
 		
-		playerName = new JTextField(10);
-		playerName.setBounds(30, 150, 300, 30);
-		this.add(playerName);
+		ipLabel = new JLabel("ipアドレスを入力してください");
+		ipLabel.setBounds(30, 130, 300, 30);
+		this.add(ipLabel);
+		
+		ip = new JTextField(10);
+		ip.setBounds(30, 160, 300, 30);
+		this.add(ip);
 		
 		ok = new JButton("OK");
 		ok.setBounds(260, 200, 100, 30);
@@ -84,11 +93,11 @@ public class SinglePlayerNameSettingDialog extends Dialog {
 //					frame.setVisible(true);
 //				}
 				if(isCheckingServer){
-					ServerReversiFrame serverFrame = new ServerReversiFrame(owner, "reversi server", "", playerName.getText());
+					ServerReversiFrame serverFrame = new ServerReversiFrame(owner, "reversi server");
 					serverFrame.setVisible(true);
 					dispose();
 				}else{
-					ClientReversiFrame clientFrame = new ClientReversiFrame(owner, "reversi client", playerName.getText(), "");
+					ClientReversiFrame clientFrame = new ClientReversiFrame(owner, "reversi client", ip.getText());
 					clientFrame.setVisible(true);
 					dispose();
 				}
@@ -96,14 +105,16 @@ public class SinglePlayerNameSettingDialog extends Dialog {
 			}
 		});
 		this.add(ok);
+		ipLabel.setVisible(false);
+		ip.setVisible(false);
 
 	}
 	
-	public void updateLabel(){
+	public void updatePlayerColorLabel(){
 		if(isCheckingServer){
-			nameLabel.setText("プレイヤー●の名前を入力してください");
+			playerColor.setText("あなたは●のプレイヤーです（後攻）");
 		}else{
-			nameLabel.setText("プレイヤー○の名前を入力してください");
+			playerColor.setText("あなたは○のプレイヤーです（先攻）");
 		}
 	}
 

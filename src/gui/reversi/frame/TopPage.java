@@ -48,7 +48,7 @@ public class TopPage extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SinglePlayerNameSettingDialog singleplayerNameSettingDialog = new SinglePlayerNameSettingDialog(TopPage.this, "プレイヤー名の設定");
+				ConnectSettingDialog singleplayerNameSettingDialog = new ConnectSettingDialog(TopPage.this, "プレイヤー名の設定");
 				singleplayerNameSettingDialog.setVisible(true);
 			}
 		});

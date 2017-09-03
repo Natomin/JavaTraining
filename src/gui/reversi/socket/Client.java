@@ -17,15 +17,14 @@ public class Client extends Thread {
 	private InputStream is;
 	private ReversiWrapper reversi;
 
-	public Client(ReversiWrapper reversi) throws UnknownHostException, IOException {
+	public Client(ReversiWrapper reversi, String ip) throws UnknownHostException, IOException {
 		this.reversi = reversi;
 		// ソケット生成
-		s = new Socket("localhost", 8080);
+		s = new Socket(ip, 8080);
 	}
 
 	public void run() {
 		while (true) {
-			System.out.println("client");
 			try {
 				is = s.getInputStream();
 			} catch (IOException e) {
@@ -38,7 +37,6 @@ public class Client extends Thread {
 					try {
 						reversi.putPiece(i, j, dis.readInt());
 					} catch (IOException e) {
-						// TODO 自動生成された catch ブロック
 						e.printStackTrace();
 					}
 				}
@@ -51,7 +49,6 @@ public class Client extends Thread {
 		try {
 			os = s.getOutputStream();
 		} catch (IOException e1) {
-			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
 		} // 送信
 		DataOutputStream dos = new DataOutputStream(os);
@@ -62,7 +59,6 @@ public class Client extends Thread {
 				try {
 					dos.writeInt(state);
 				} catch (IOException e) {
-					// TODO 自動生成された catch ブロック
 					e.printStackTrace();
 				}
 			}

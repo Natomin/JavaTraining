@@ -36,7 +36,6 @@ public class Server extends Thread {
 				for (int i = 0; i < Reversi.BOARD_SIZE; i++) {
 					for (int j = 0; j < Reversi.BOARD_SIZE; j++) {
 						reversi.putPiece(i, j, dis.readInt());
-						System.out.println("server" + i + j );
 					}
 				}
 

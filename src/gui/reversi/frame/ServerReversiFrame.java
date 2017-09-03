@@ -23,13 +23,10 @@ public class ServerReversiFrame extends Dialog implements IReversiFrame{
 	private JLabel label;
 	private ReversiWrapper reversi; // 駒を置くときの処理関数を持ったReversiクラス型のフィールドreversi
 	private Server server;
-	private String whitePlayerName;
-	private String blackPlayerName;
+	private UpdateThread updateThread;
 
-	public ServerReversiFrame(Frame owner, String title, String whitePlayerName, String blackPlayerName) {
+	public ServerReversiFrame(Frame owner, String title) {
 		super(owner, title);
-		this.whitePlayerName = whitePlayerName;
-		this.blackPlayerName = blackPlayerName;
 		reversi = new ReversiWrapper(); // コンストラクタReversi()呼び出し
 		reversi.setCurrentColor(ReversiWrapper.WHITE);
 		
@@ -94,7 +91,7 @@ public class ServerReversiFrame extends Dialog implements IReversiFrame{
 			// TODO 自動生成された catch ブロック
 			e1.printStackTrace();
 		}
-		UpdateThread updateThread = new UpdateThread(this);
+		updateThread = new UpdateThread(this);
 		updateThread.start();
 	}
 
@@ -128,14 +125,15 @@ public class ServerReversiFrame extends Dialog implements IReversiFrame{
 		String text;
 		// 現在のプレイヤーの色を取得してラベルに表示
 		if (reversi.getCurrentColor() == ReversiWrapper.BLACK) {
-			text = "●" + blackPlayerName + "さんの番です。";
+			text = "●" + "の番です。";
 		} else {
-			text = "○" + whitePlayerName + "さんの番です。";
+			text = "○" + "の番です。";
 		}
 		label.setText(text);
 		
 		if(reversi.isFinished()){
-			FinishDialog finishDialog = new FinishDialog(this, "結果", reversi, blackPlayerName, whitePlayerName);
+			FinishDialog finishDialog = new FinishDialog(this, "結果", reversi, "", "");
+			updateThread.stopRunning();
 			finishDialog.setVisible(true);
 		}
 
