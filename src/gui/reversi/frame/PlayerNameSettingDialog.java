@@ -12,6 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class PlayerNameSettingDialog extends Dialog {
+	private JLabel bk;
+	private JLabel wh;
+	private JButton ok;
+	
 
 	public PlayerNameSettingDialog(Frame owner, String title) {
 		super(owner, title);
@@ -26,21 +30,21 @@ public class PlayerNameSettingDialog extends Dialog {
 			}
 		});
 
-		JLabel bk = new JLabel("プレイヤー●の名前を入力してください");
+		bk = new JLabel("プレイヤー●の名前を入力してください");
 		bk.setBounds(30, 30, 300, 30);
 		this.add(bk);
 		JTextField bkName = new JTextField(10);
 		bkName.setBounds(30, 70, 300, 30);
 		this.add(bkName);
 
-		JLabel wh = new JLabel("プレイヤー○の名前を入力してください");
+		wh = new JLabel("プレイヤー○の名前を入力してください");
 		wh.setBounds(30, 110, 300, 30);
 		this.add(wh);
 		JTextField whName = new JTextField(10);
 		whName.setBounds(30, 150, 300, 30);
 		this.add(whName);
 
-		JButton ok = new JButton("OK");
+		ok = new JButton("OK");
 		ok.setBounds(260, 200, 100, 30);
 		ok.addActionListener(new ActionListener() {
 

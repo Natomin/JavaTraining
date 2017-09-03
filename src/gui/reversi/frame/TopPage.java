@@ -1,13 +1,8 @@
 package gui.reversi.frame;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -49,6 +44,15 @@ public class TopPage extends JFrame {
 		this.add(standalonePlay);
 
 		JButton connectPlay = new JButton("通信対戦であそぶ");
+		connectPlay.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SinglePlayerNameSettingDialog singleplayerNameSettingDialog = new SinglePlayerNameSettingDialog(TopPage.this, "プレイヤー名の設定");
+				singleplayerNameSettingDialog.setVisible(true);
+			}
+		});
+		
 		connectPlay.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 16));
 		connectPlay.setBounds(270, 450, 200, 50);
 		this.add(connectPlay);
