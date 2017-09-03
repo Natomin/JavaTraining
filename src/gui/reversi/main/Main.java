@@ -1,6 +1,5 @@
 package gui.reversi.main;
 
-import gui.reversi.frame.ReversiFrame;
 import gui.reversi.frame.TopPage;
 
 public class Main {

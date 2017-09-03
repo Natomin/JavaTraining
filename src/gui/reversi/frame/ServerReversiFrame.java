@@ -8,26 +8,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import gui.reversi.game.Reversi;
+import gui.reversi.game.ReversiWrapper;
+import gui.reversi.socket.Server;
 
-public class ReversiFrame extends Dialog {
+public class ServerReversiFrame extends Dialog implements IReversiFrame{
 
 	private static final int BUTTON_SIZE = 75;
 	private JButton[][] buttons;
 	private JLabel label;
-	private Reversi reversi; // 駒を置くときの処理関数を持ったReversiクラス型のフィールドreversi
+	private ReversiWrapper reversi; // 駒を置くときの処理関数を持ったReversiクラス型のフィールドreversi
+	private Server server;
 	private String whitePlayerName;
 	private String blackPlayerName;
 
-	public ReversiFrame(Frame owner, String title, String whitePlayerName, String blackPlayerName) {
+	public ServerReversiFrame(Frame owner, String title, String whitePlayerName, String blackPlayerName) {
 		super(owner, title);
 		this.whitePlayerName = whitePlayerName;
 		this.blackPlayerName = blackPlayerName;
-		reversi = new Reversi(); // コンストラクタReversi()呼び出し
+		reversi = new ReversiWrapper(); // コンストラクタReversi()呼び出し
+		reversi.setCurrentColor(ReversiWrapper.WHITE);
 		
 		// frameの設定
 		this.setBounds(0, 0, 600, 700);
@@ -43,16 +47,16 @@ public class ReversiFrame extends Dialog {
 		
 		// ラベルの設定
 		label = new JLabel();
-		label.setBounds(0, BUTTON_SIZE * Reversi.BOARD_SIZE + 30, 500, 50);
+		label.setBounds(0, BUTTON_SIZE * ReversiWrapper.BOARD_SIZE + 30, 500, 50);
 		label.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 26));
 		this.add(label); // frameにラベルを追加
 
 		// ボタンの設定
-		buttons = new JButton[Reversi.BOARD_SIZE][Reversi.BOARD_SIZE];
+		buttons = new JButton[ReversiWrapper.BOARD_SIZE][ReversiWrapper.BOARD_SIZE];
 
 		// 盤上をひとつずつ見ていくループ
-		for (int i = 0; i < Reversi.BOARD_SIZE; i++) {
-			for (int j = 0; j < Reversi.BOARD_SIZE; j++) {
+		for (int i = 0; i < ReversiWrapper.BOARD_SIZE; i++) {
+			for (int j = 0; j < ReversiWrapper.BOARD_SIZE; j++) {
 
 				final int x = i;
 				final int y = j;
@@ -69,35 +73,50 @@ public class ReversiFrame extends Dialog {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// Event発生(Bottonsが押されたとき)の処理
-						reversi.putPiece(x, y);
+						reversi.putPiece(x, y, ReversiWrapper.BLACK);
 						update();
+						try {
+							server.write();
+						} catch (IOException e1) {
+							// TODO 自動生成された catch ブロック
+							e1.printStackTrace();
+						}
 					}
 				});
 				this.add(buttons[i][j]); // frameに追加
 			}
 		}
 		update();
+		try {
+			server = new Server(reversi);
+			server.start();
+		} catch (IOException e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
+		}
+		UpdateThread updateThread = new UpdateThread(this);
+		updateThread.start();
 	}
 
-	private void update() {
-		for (int i = 0; i < Reversi.BOARD_SIZE; i++) {
-			for (int j = 0; j < Reversi.BOARD_SIZE; j++) {
+	public void update() {
+		for (int i = 0; i < ReversiWrapper.BOARD_SIZE; i++) {
+			for (int j = 0; j < ReversiWrapper.BOARD_SIZE; j++) {
 				// 盤上の位置情報を取得しframe上に反映させる
 				int state = reversi.getStateAt(i, j);
 
 				switch (state) {
-				case Reversi.NONE:
+				case ReversiWrapper.NONE:
 					buttons[i][j].setText("");
 					buttons[i][j].setBackground(new Color(0, 100, 0));
 					break;
 
-				case Reversi.BLACK:
+				case ReversiWrapper.BLACK:
 					buttons[i][j].setFont(new Font("ＭＳ ゴシック", Font.BOLD, 80));
 					buttons[i][j].setBackground(new Color(0, 100, 0));
 					buttons[i][j].setText("●");
 					break;
 
-				case Reversi.WHITE:
+				case ReversiWrapper.WHITE:
 					buttons[i][j].setFont(new Font("ＭＳ ゴシック", Font.BOLD, 80));
 					buttons[i][j].setBackground(new Color(0, 100, 0));
 					buttons[i][j].setText("○");
@@ -108,7 +127,7 @@ public class ReversiFrame extends Dialog {
 		
 		String text;
 		// 現在のプレイヤーの色を取得してラベルに表示
-		if (reversi.getCurrentColor() == Reversi.BLACK) {
+		if (reversi.getCurrentColor() == ReversiWrapper.BLACK) {
 			text = "●" + blackPlayerName + "さんの番です。";
 		} else {
 			text = "○" + whitePlayerName + "さんの番です。";
@@ -121,4 +140,5 @@ public class ReversiFrame extends Dialog {
 		}
 
 	}
+
 }

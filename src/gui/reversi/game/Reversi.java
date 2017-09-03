@@ -2,7 +2,7 @@ package gui.reversi.game;
 
 import java.util.Random;
 
-public class Reversi {
+public class Reversi implements IReversi{
 	public static final int NONE = 0;	// 何も置かれていない
 	public static final int BLACK = 1;	// 黒が置かれている
 	public static final int WHITE = 2;	// 白が置かれている
@@ -32,6 +32,11 @@ public class Reversi {
 	public int getCurrentColor()
 	{
 		return this.currentColor;
+	}
+	
+	//デバック用
+	public void setCurrentColor(int color){
+		currentColor = color;
 	}
 	
 	/**

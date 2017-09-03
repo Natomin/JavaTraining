@@ -83,12 +83,16 @@ public class SinglePlayerNameSettingDialog extends Dialog {
 //					ReversiFrame frame = new ReversiFrame(wh.getText(), bk.getText());
 //					frame.setVisible(true);
 //				}
+				if(isCheckingServer){
+					ServerReversiFrame serverFrame = new ServerReversiFrame(owner, "reversi server", "", playerName.getText());
+					serverFrame.setVisible(true);
+					dispose();
+				}else{
+					ClientReversiFrame clientFrame = new ClientReversiFrame(owner, "reversi client", playerName.getText(), "");
+					clientFrame.setVisible(true);
+					dispose();
+				}
 				
-				//server or client reversiフレームの呼び出し
-//				ReversiFrame frame = new ReversiFrame(owner, "reversi", whName.getText(), bkName.getText());
-//				frame.setVisible(true);
-//				dispose();
-
 			}
 		});
 		this.add(ok);

@@ -60,7 +60,7 @@ public class PlayerNameSettingDialog extends Dialog {
 //					ReversiFrame frame = new ReversiFrame(wh.getText(), bk.getText());
 //					frame.setVisible(true);
 //				}
-				ReversiFrame frame = new ReversiFrame(owner, "reversi", whName.getText(), bkName.getText());
+				StandAloneReversiFrame frame = new StandAloneReversiFrame(owner, "reversi", whName.getText(), bkName.getText());
 				frame.setVisible(true);
 				dispose();
 
