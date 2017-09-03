@@ -11,9 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class SetPlayerNameDialog extends Dialog {
+public class PlayerNameSettingDialog extends Dialog {
 
-	public SetPlayerNameDialog(Frame owner, String title) {
+	public PlayerNameSettingDialog(Frame owner, String title) {
 		super(owner, title);
 		setLayout(null);
 		setSize(370, 250);

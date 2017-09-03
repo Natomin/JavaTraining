@@ -42,7 +42,7 @@ public class TopPage extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// 表示するダイアログの設定
-				SetPlayerNameDialog playerNameDialog = new SetPlayerNameDialog(TopPage.this, "プレイヤー名の設定");
+				PlayerNameSettingDialog playerNameDialog = new PlayerNameSettingDialog(TopPage.this, "プレイヤー名の設定");
 				playerNameDialog.setVisible(true);
 			}
 		});

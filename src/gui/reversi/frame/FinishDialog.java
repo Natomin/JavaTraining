@@ -44,7 +44,7 @@ public class FinishDialog extends Dialog {
 	private void countAll(Reversi reversi){
 		for (int i = 0; i < Reversi.BOARD_SIZE; i++) {
 			for (int j = 0; j < Reversi.BOARD_SIZE; j++) {
-				// 盤上の色情報を取得しfカウントする
+				// 盤上の色情報を取得しカウントする
 				int state = reversi.getStateAt(i, j);
 
 				switch (state) {
