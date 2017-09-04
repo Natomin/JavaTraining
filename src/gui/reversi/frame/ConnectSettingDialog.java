@@ -42,8 +42,6 @@ public class ConnectSettingDialog extends Dialog {
 				isCheckingServer = true;
 				clientCheckbox.setSelected(false);
 				updatePlayerColorLabel();
-				ipLabel.setVisible(false);
-				ip.setVisible(false);
 			}
 		});
 		serverCheckbox.setBounds(30, 30, 150, 30);
@@ -56,8 +54,6 @@ public class ConnectSettingDialog extends Dialog {
 				isCheckingServer = false;
 				serverCheckbox.setSelected(false);
 				updatePlayerColorLabel();
-				ipLabel.setVisible(true);
-				ip.setVisible(true);
 			}
 		});
 		clientCheckbox.setBounds(180, 30, 150, 30);
@@ -93,7 +89,7 @@ public class ConnectSettingDialog extends Dialog {
 //					frame.setVisible(true);
 //				}
 				if(isCheckingServer){
-					ServerReversiFrame serverFrame = new ServerReversiFrame(owner, "reversi server");
+					ServerReversiFrame serverFrame = new ServerReversiFrame(owner, "reversi server", ip.getText());
 					serverFrame.setVisible(true);
 					dispose();
 				}else{
@@ -105,9 +101,6 @@ public class ConnectSettingDialog extends Dialog {
 			}
 		});
 		this.add(ok);
-		ipLabel.setVisible(false);
-		ip.setVisible(false);
-
 	}
 	
 	public void updatePlayerColorLabel(){

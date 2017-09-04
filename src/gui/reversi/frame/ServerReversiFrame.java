@@ -27,7 +27,7 @@ public class ServerReversiFrame extends Dialog implements IReversiFrame {
 	private UpdateThread updateThread;
 	private JLabel clock;
 
-	public ServerReversiFrame(Frame owner, String title) {
+	public ServerReversiFrame(Frame owner, String title, String ip) {
 		super(owner, title);
 		reversi = new ReversiWrapper(); // コンストラクタReversi()呼び出し
 		reversi.setCurrentColor(ReversiWrapper.WHITE);
@@ -93,7 +93,7 @@ public class ServerReversiFrame extends Dialog implements IReversiFrame {
 		}
 		update();
 		try {
-			server = new Server(reversi);
+			server = new Server(reversi, ip);
 			server.start();
 		} catch (IOException e1) {
 			// TODO 自動生成された catch ブロック

@@ -19,11 +19,11 @@ public class Server extends Thread {
 	private Socket s;
 	private ReversiWrapper reversi;
 
-	public Server(ReversiWrapper reversi) throws IOException {
+	public Server(ReversiWrapper reversi, String ip) throws IOException {
 		this.reversi = reversi;
 		// ソケットを生成＆待機
 		ss = new ServerSocket();
-		ss.bind(new InetSocketAddress("localhost", 8080));
+		ss.bind(new InetSocketAddress(ip, 8080));
 		s = ss.accept();
 	}
 
