@@ -16,6 +16,7 @@ public class TopPage extends JFrame {
 		// frameの設定
 		this.setBounds(50, 50, 500, 550);
 		this.setLayout(null);
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// TitleLabelの設定
 		JLabel label = new JLabel();

@@ -13,10 +13,11 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import gui.reversi.clock.UpdateClockThread;
 import gui.reversi.game.ReversiWrapper;
 import gui.reversi.socket.Client;
 
-public class ClientReversiFrame extends Dialog implements IReversiFrame{
+public class ClientReversiFrame extends Dialog implements IReversiFrame {
 
 	private static final int BUTTON_SIZE = 75;
 	private JButton[][] buttons;
@@ -24,16 +25,18 @@ public class ClientReversiFrame extends Dialog implements IReversiFrame{
 	private ReversiWrapper reversi; // 駒を置くときの処理関数を持ったReversiクラス型のフィールドreversi
 	private Client client;
 	private UpdateThread updateThread;
+	private JLabel clock;
 
 	public ClientReversiFrame(Frame owner, String title, String ip) {
 		super(owner, title);
-		reversi = new ReversiWrapper(); 
-		//デバック用
+		reversi = new ReversiWrapper();
+		// デバック用
 		reversi.setCurrentColor(ReversiWrapper.WHITE);
-		
+
 		// frameの設定
 		this.setBounds(0, 0, 600, 700);
 		this.setLayout(null);
+		this.setResizable(false);
 		this.setModalityType(DEFAULT_MODALITY_TYPE);
 		this.setBackground(new Color(0, 100, 0));
 		addWindowListener(new WindowAdapter() {
@@ -42,7 +45,12 @@ public class ClientReversiFrame extends Dialog implements IReversiFrame{
 				dispose();
 			}
 		});
-		
+
+		// 時計の設定
+		clock = new JLabel("");
+		clock.setBounds(500, BUTTON_SIZE * ReversiWrapper.BOARD_SIZE + 30, 100, 50);
+		this.add(clock);
+
 		// ラベルの設定
 		label = new JLabel();
 		label.setBounds(0, BUTTON_SIZE * ReversiWrapper.BOARD_SIZE + 30, 500, 50);
@@ -89,6 +97,8 @@ public class ClientReversiFrame extends Dialog implements IReversiFrame{
 		}
 		updateThread = new UpdateThread(this);
 		updateThread.start();
+		new UpdateClockThread(this).start();
+
 	}
 
 	public void update() {
@@ -117,17 +127,17 @@ public class ClientReversiFrame extends Dialog implements IReversiFrame{
 				}
 			}
 		}
-		
+
 		String text;
 		// 現在のプレイヤーの色を取得してラベルに表示
 		if (reversi.getCurrentColor() == ReversiWrapper.BLACK) {
-			text = "●"  + "の番です。";
+			text = "●" + "の番です。";
 		} else {
 			text = "○" + "の番です。";
 		}
 		label.setText(text);
-		
-		if(reversi.isFinished()){
+
+		if (reversi.isFinished()) {
 			FinishDialog finishDialog = new FinishDialog(this, "結果", reversi, "", "");
 			updateThread.stopRunning();
 			finishDialog.setVisible(true);
@@ -135,4 +145,7 @@ public class ClientReversiFrame extends Dialog implements IReversiFrame{
 
 	}
 
+	public void updateTime(String time) {
+		clock.setText(time);
+	}
 }

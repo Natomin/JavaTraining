@@ -12,9 +12,11 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import gui.reversi.clock.UpdateClockThread;
 import gui.reversi.game.Reversi;
+import gui.reversi.game.ReversiWrapper;
 
-public class StandAloneReversiFrame extends Dialog implements IReversiFrame{
+public class StandAloneReversiFrame extends Dialog implements IReversiFrame {
 
 	private static final int BUTTON_SIZE = 75;
 	private JButton[][] buttons;
@@ -22,16 +24,18 @@ public class StandAloneReversiFrame extends Dialog implements IReversiFrame{
 	private Reversi reversi; // 駒を置くときの処理関数を持ったReversiクラス型のフィールドreversi
 	private String whitePlayerName;
 	private String blackPlayerName;
+	private JLabel clock;
 
 	public StandAloneReversiFrame(Frame owner, String title, String whitePlayerName, String blackPlayerName) {
 		super(owner, title);
 		this.whitePlayerName = whitePlayerName;
 		this.blackPlayerName = blackPlayerName;
 		reversi = new Reversi(); // コンストラクタReversi()呼び出し
-		
+
 		// frameの設定
 		this.setBounds(0, 0, 600, 700);
 		this.setLayout(null);
+		this.setResizable(false);
 		this.setModalityType(DEFAULT_MODALITY_TYPE);
 		this.setBackground(new Color(0, 100, 0));
 		addWindowListener(new WindowAdapter() {
@@ -41,6 +45,10 @@ public class StandAloneReversiFrame extends Dialog implements IReversiFrame{
 			}
 		});
 		
+		clock = new JLabel();
+		clock.setBounds(500, BUTTON_SIZE * ReversiWrapper.BOARD_SIZE + 30, 100, 50);
+		this.add(clock);
+
 		// ラベルの設定
 		label = new JLabel();
 		label.setBounds(0, BUTTON_SIZE * Reversi.BOARD_SIZE + 30, 500, 50);
@@ -77,6 +85,7 @@ public class StandAloneReversiFrame extends Dialog implements IReversiFrame{
 			}
 		}
 		update();
+		new UpdateClockThread(this).start();
 	}
 
 	public void update() {
@@ -105,7 +114,7 @@ public class StandAloneReversiFrame extends Dialog implements IReversiFrame{
 				}
 			}
 		}
-		
+
 		String text;
 		// 現在のプレイヤーの色を取得してラベルに表示
 		if (reversi.getCurrentColor() == Reversi.BLACK) {
@@ -114,11 +123,14 @@ public class StandAloneReversiFrame extends Dialog implements IReversiFrame{
 			text = "○" + whitePlayerName + "さんの番です。";
 		}
 		label.setText(text);
-		
-		if(reversi.isFinished()){
+
+		if (reversi.isFinished()) {
 			FinishDialog finishDialog = new FinishDialog(this, "結果", reversi, blackPlayerName, whitePlayerName);
 			finishDialog.setVisible(true);
 		}
+	}
 
+	public void updateTime(String time) {
+		clock.setText(time);
 	}
 }
